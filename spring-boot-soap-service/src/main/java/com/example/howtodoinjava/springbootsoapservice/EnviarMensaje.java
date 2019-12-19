@@ -37,7 +37,7 @@ public class EnviarMensaje {
 
             TextMessage message = session.createTextMessage(client.toString());
             producer.send(message);
-            logger.info("Mensaje Enviado A La Cola MQ"+message.getText());
+            logger.info("Mensaje Enviado A La Cola MQ:{ "+message.getText()+"}");
             // Clean up
             session.close();
             connection.close();
