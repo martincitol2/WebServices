@@ -10,8 +10,6 @@ public class Client {
 
     private String dni;
 
-    private String nup;
-
     private String cbu;
 
     private String accountNumber;
@@ -42,14 +40,6 @@ public class Client {
 
     public void setDni(String dni) {
         this.dni = dni;
-    }
-
-    public String getNup() {
-        return nup;
-    }
-
-    public void setNup(String nup) {
-        this.nup = nup;
     }
 
     public String getCbu() {
@@ -84,15 +74,15 @@ public class Client {
         this.amount = amount;
     }
 
-    public String stringAmount(){
+    public String stringAmount() {
         String str = Double.toString(amount);
-        String st = StringUtils.leftPad(str,20,"0");
+        String st = StringUtils.leftPad(str, 20, "0");
         st = st.replace(".", "0");
         return st;
     }
 
     @Override
     public String toString() {
-        return name +";"+surname+";"+dni+";"+nup+";"+cbu+";"+accountNumber+";"+currency+";"+stringAmount();
+        return name + ";" + surname + ";" + dni + ";"+ cbu + ";" + accountNumber + ";" + currency + ";" + stringAmount();
     }
 }

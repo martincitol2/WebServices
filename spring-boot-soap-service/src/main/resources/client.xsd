@@ -7,7 +7,6 @@
                 <xs:element name="name" type="xs:string"/>
                 <xs:element name="surname" type="xs:string"/>
                 <xs:element name="dni" type="xs:string"/>
-                <xs:element name="nup" type="xs:string"/>
                 <xs:element name="cbu" type="xs:string"/>
                 <xs:element name="accountNumber" type="xs:string"/>
                 <xs:element name="currency" type="xs:string"/>

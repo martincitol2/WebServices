@@ -30,7 +30,7 @@ public class ClientEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "ClientDetailsRequest")
     @ResponsePayload
     public ClientDetailsResponse getClient(@RequestPayload ClientDetailsRequest request) {
-        
+
         Client client = validation.validate(request);
         return enviarMensaje.enviarMensaje(client);
 

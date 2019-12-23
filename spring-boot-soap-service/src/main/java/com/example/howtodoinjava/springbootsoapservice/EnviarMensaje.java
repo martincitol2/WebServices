@@ -15,7 +15,7 @@ public class EnviarMensaje {
     private static final Logger logger = LogManager.getLogger(SpringBootSoapServiceApplication.class);
     ClientDetailsResponse response = new ClientDetailsResponse();
 
-    public ClientDetailsResponse enviarMensaje(Client client){
+    public ClientDetailsResponse enviarMensaje(Client client) {
         response.setCodigoError("200");
         response.setDescripcion("TODO OK");
         try {
@@ -37,12 +37,11 @@ public class EnviarMensaje {
 
             TextMessage message = session.createTextMessage(client.toString());
             producer.send(message);
-            logger.info("Mensaje Enviado A La Cola MQ:{ "+message.getText()+"}");
+            logger.info("Mensaje Enviado A La Cola MQ:{ " + message.getText() + "}");
             // Clean up
             session.close();
             connection.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Caught: " + e);
             e.printStackTrace();
             response.setDescripcion("Fallo Envio Cola MQ");

@@ -15,41 +15,26 @@ import org.springframework.xml.xsd.XsdSchema;
 @EnableWs
 @Configuration
 public class Config extends WsConfigurerAdapter {
-	@Bean
-	public ServletRegistrationBean messageDispatcherServlet(ApplicationContext applicationContext) {
-		MessageDispatcherServlet servlet = new MessageDispatcherServlet();
-		servlet.setApplicationContext(applicationContext);
-		servlet.setTransformWsdlLocations(true);
-		return new ServletRegistrationBean(servlet, "/service/*");
-	}
+    @Bean
+    public ServletRegistrationBean messageDispatcherServlet(ApplicationContext applicationContext) {
+        MessageDispatcherServlet servlet = new MessageDispatcherServlet();
+        servlet.setApplicationContext(applicationContext);
+        servlet.setTransformWsdlLocations(true);
+        return new ServletRegistrationBean(servlet, "/service/*");
+    }
 
-	@Bean(name = "studentDetailsWsdl")
-	public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema studentSchema) {
-		DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
-		wsdl11Definition.setPortTypeName("StudentDetailsPort");
-		wsdl11Definition.setLocationUri("/service/student-details");
-		wsdl11Definition.setTargetNamespace("http://www.howtodoinjava.com/xml/school");
-		wsdl11Definition.setSchema(studentSchema);
-		return wsdl11Definition;
-	}
+    @Bean(name = "clientDetailsWsdl")
+    public DefaultWsdl11Definition defaultWsdl11Definitions(XsdSchema clientSchema) {
+        DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
+        wsdl11Definition.setPortTypeName("ClientDetailsPort");
+        wsdl11Definition.setLocationUri("/service/client-details");
+        wsdl11Definition.setTargetNamespace("http://www.howtodoinjava.com/xml/school");
+        wsdl11Definition.setSchema(clientSchema);
+        return wsdl11Definition;
+    }
 
-	@Bean
-	public XsdSchema studentSchema() {
-		return new SimpleXsdSchema(new ClassPathResource("school.xsd"));
-	}
-
-	@Bean(name = "clientDetailsWsdl")
-	public DefaultWsdl11Definition defaultWsdl11Definitions(XsdSchema clientSchema) {
-		DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
-		wsdl11Definition.setPortTypeName("ClientDetailsPort");
-		wsdl11Definition.setLocationUri("/service/client-details");
-		wsdl11Definition.setTargetNamespace("http://www.howtodoinjava.com/xml/school");
-		wsdl11Definition.setSchema(clientSchema);
-		return wsdl11Definition;
-	}
-
-	@Bean
-	public XsdSchema clientSchema() {
-		return new SimpleXsdSchema(new ClassPathResource("client.xsd"));
-	}
+    @Bean
+    public XsdSchema clientSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("client.xsd"));
+    }
 }

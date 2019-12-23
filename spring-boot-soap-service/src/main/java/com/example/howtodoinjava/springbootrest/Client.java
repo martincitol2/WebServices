@@ -1,37 +1,34 @@
-package com.howtodoinjava.xml.school;
+package com.example.howtodoinjava.springbootrest;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import org.apache.commons.lang3.StringUtils;
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {"name", "surname", "dni", "cbu", "accountNumber", "currency", "amount"})
-@XmlRootElement(name = "ClientDetailsRequest")
-public class ClientDetailsRequest {
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-    @XmlElement(required = true)
+@Entity
+public class Client {
+
     private String name;
-    @XmlElement(required = true)
+
     private String surname;
-    @XmlElement(required = true)
+
     private String dni;
-    @XmlElement(required = true)
+
+    @Id
     private String cbu;
-    @XmlElement(required = true)
+
     private String accountNumber;
-    @XmlElement(required = true)
+
     private String currency;
-    @XmlElement(required = true)
+
     private Double amount;
 
     public String getName() {
         return name;
     }
 
-    public void setName(String value) {
-        this.name = value;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSurname() {
@@ -80,5 +77,17 @@ public class ClientDetailsRequest {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String stringAmount() {
+        String str = Double.toString(amount);
+        String st = StringUtils.leftPad(str, 20, "0");
+        st = st.replace(".", "0");
+        return st;
+    }
+
+    @Override
+    public String toString() {
+        return name + ";" + surname + ";" + dni + ";"+ cbu + ";" + accountNumber + ";" + currency + ";" + stringAmount();
     }
 }
