@@ -2,10 +2,16 @@ package com.example.howtodoinjava.springbootrest;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
+@Entity(name = "cliente")
+@NamedStoredProcedureQueries(value = {@NamedStoredProcedureQuery(name = "procedure-one", procedureName = "findAllClients"),
+        @NamedStoredProcedureQuery(name = "procedure-two", procedureName = "transferir", parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "cbu_llegada", type = String.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "cbu_salida", type = String.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "importe", type = Double.class)
+        })
+})
 public class Client {
 
     private String name;
@@ -17,6 +23,7 @@ public class Client {
     @Id
     private String cbu;
 
+    @Column(name = "account_number")
     private String accountNumber;
 
     private String currency;
@@ -88,6 +95,6 @@ public class Client {
 
     @Override
     public String toString() {
-        return name + ";" + surname + ";" + dni + ";"+ cbu + ";" + accountNumber + ";" + currency + ";" + stringAmount();
+        return name + ";" + surname + ";" + dni + ";" + cbu + ";" + accountNumber + ";" + currency + ";" + stringAmount();
     }
 }

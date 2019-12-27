@@ -1,12 +1,19 @@
 package com.example.howtodoinjava.springbootrest;
 
+import com.example.howtodoinjava.SpringBootSoapServiceApplication;
+import com.howtodoinjava.xml.school.ClientDetailsResponse;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @Controller
 @RequestMapping(path = "/demo")
 public class MainController {
+
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(SpringBootSoapServiceApplication.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -14,6 +21,12 @@ public class MainController {
 
     @Autowired
     private ClientRepositorio clientRepository;
+
+    @Autowired
+    ClientDAO edao;
+
+    @Autowired
+    TranferenciaDAO tdao;
 
     @PostMapping(path = "/add")
     public @ResponseBody
@@ -28,16 +41,71 @@ public class MainController {
 
     @PutMapping(path = "/add/transfer")
     public @ResponseBody
-    String addTransfer(@RequestParam String name, @RequestParam String surname, @RequestParam String cbu, @RequestParam String dni, @RequestParam Double amount) {
+    Object addTransfer(@RequestParam String cbu, @RequestParam String cbu2, @RequestParam Double amount) {
+        ClientDetailsResponse response = new ClientDetailsResponse();
+        response.setDescripcion("Todo OK");
+        response.setCodigoError("200");
+        String est = "Transferido";
+        try {
+            edao.realizarTransferencia(cbu, cbu2,amount);
+            tdao.registrarTransferencia(new Date(), amount, cbu, cbu2, est);
 
-        return "Transferido";
+        } catch (Exception e) {
+            logger.error("no se pudo realizar la transferencia debido a: " + e.getMessage());
+            response.setDescripcion("No se pudo Realizar la transferencia");
+            response.setCodigoError("500");
+        }
+
+        return response;
     }
 
-    @GetMapping(path = "get/client")
+    @PutMapping(path = "/cancel/transfer")
     public @ResponseBody
-    Client getClient(@RequestParam String cbu){
-        return clientRepository.findByCbu(cbu);
+    Object cancelTransfer(@RequestParam Long id) {
+        ClientDetailsResponse response = new ClientDetailsResponse();
+        response.setDescripcion("Todo OK");
+        response.setCodigoError("200");
+        String est = "Transferencia Cancelada";
 
+        try {
+            tdao.cancelarTransferencia(id);
+
+        } catch (Exception e) {
+            logger.error("no se pudo cancelar la transferencia debido a: " + e.getMessage());
+            response.setDescripcion("No se pudo Cancelar la transferencia");
+            response.setCodigoError("500");
+        }
+
+        return response;
+    }
+
+    @GetMapping(path = "/clients")
+    public @ResponseBody
+    Iterable<Client> getClientes() {
+
+        return clientRepository.findAll();
+
+    }
+
+    @GetMapping(value = "/getall")
+    public @ResponseBody
+    Iterable<Client> getAll() {
+        return edao.getAllClients();
+    }
+
+    @GetMapping(path = "/client")
+    public @ResponseBody
+    Object getCliente(@RequestParam String cbu) {
+
+        try {
+            if (!clientRepository.findByCbu(cbu).equals(null)) {
+                return clientRepository.findByCbu(cbu);
+            } else {
+                return "Cliente no Encontrado";
+            }
+        } catch (Exception e) {
+            return "El CBU ingresado no pertenece a ningún cliente";
+        }
     }
 
     @GetMapping(path = "/all")

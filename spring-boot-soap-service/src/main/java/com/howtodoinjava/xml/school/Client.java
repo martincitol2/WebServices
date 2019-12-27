@@ -83,6 +83,6 @@ public class Client {
 
     @Override
     public String toString() {
-        return name + ";" + surname + ";" + dni + ";"+ cbu + ";" + accountNumber + ";" + currency + ";" + stringAmount();
+        return name + ";" + surname + ";" + dni + ";" + cbu + ";" + accountNumber + ";" + currency + ";" + stringAmount();
     }
 }
