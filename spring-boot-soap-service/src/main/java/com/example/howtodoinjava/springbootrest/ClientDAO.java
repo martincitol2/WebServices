@@ -9,16 +9,16 @@ import javax.persistence.EntityManager;
 public class ClientDAO {
 
     @Autowired
-    private EntityManager em;
+    private EntityManager entityManager;
 
     @SuppressWarnings("unchecked")
     public Iterable<Client> getAllClients() {
-        return em.createNamedStoredProcedureQuery("procedure-one").getResultList();
+        return entityManager.createNamedStoredProcedureQuery("procedure-one").getResultList();
     }
 
     @SuppressWarnings("unchecked")
     public String realizarTransferencia(String cbu, String cbu2, Double amount) {
-        em.createNamedStoredProcedureQuery("procedure-two")
+        entityManager.createNamedStoredProcedureQuery("procedure-two")
                 .setParameter("cbu_llegada", cbu)
                 .setParameter("cbu_salida", cbu2)
                 .setParameter("importe", amount)

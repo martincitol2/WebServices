@@ -31,7 +31,6 @@ public class Validation {
         client.setCurrency(normalizate(request.getCurrency(), 3, "0", "L"));
         client.setAmount(request.getAmount());
 
-
         return client;
     }
 }

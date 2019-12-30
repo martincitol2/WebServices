@@ -23,10 +23,10 @@ public class MainController {
     private ClientRepositorio clientRepository;
 
     @Autowired
-    ClientDAO edao;
+    ClientDAO clientDAO;
 
     @Autowired
-    TranferenciaDAO tdao;
+    TranferenciaDAO tranferenciaDAO;
 
     @PostMapping(path = "/add")
     public @ResponseBody
@@ -39,6 +39,27 @@ public class MainController {
         return "Saved";
     }
 
+    @PutMapping(path = "/add/transfer/pending")
+    public @ResponseBody
+    Object addTransferPending(@RequestParam String cbu, @RequestParam String cbu2, @RequestParam Double amount) {
+        ClientDetailsResponse response = new ClientDetailsResponse();
+        response.setDescripcion("Todo OK");
+        response.setCodigoError("200");
+        String est = "Pendiente";
+        try {
+
+            tranferenciaDAO.registrarTransferencia(new Date(), amount, cbu, cbu2, est);
+
+        } catch (Exception e) {
+            logger.error("no se pudo realizar la transferencia debido a: " + e.getMessage());
+            response.setDescripcion("No se pudo Realizar la transferencia");
+            response.setCodigoError("500");
+        }
+
+        return response;
+    }
+
+/*
     @PutMapping(path = "/add/transfer")
     public @ResponseBody
     Object addTransfer(@RequestParam String cbu, @RequestParam String cbu2, @RequestParam Double amount) {
@@ -58,6 +79,7 @@ public class MainController {
 
         return response;
     }
+*/
 
     @PutMapping(path = "/cancel/transfer")
     public @ResponseBody
@@ -65,10 +87,9 @@ public class MainController {
         ClientDetailsResponse response = new ClientDetailsResponse();
         response.setDescripcion("Todo OK");
         response.setCodigoError("200");
-        String est = "Transferencia Cancelada";
 
         try {
-            tdao.cancelarTransferencia(id);
+            tranferenciaDAO.cancelarTransferencia(id);
 
         } catch (Exception e) {
             logger.error("no se pudo cancelar la transferencia debido a: " + e.getMessage());
@@ -90,7 +111,7 @@ public class MainController {
     @GetMapping(value = "/getall")
     public @ResponseBody
     Iterable<Client> getAll() {
-        return edao.getAllClients();
+        return clientDAO.getAllClients();
     }
 
     @GetMapping(path = "/client")

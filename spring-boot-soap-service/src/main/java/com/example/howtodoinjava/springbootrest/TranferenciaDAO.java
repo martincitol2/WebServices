@@ -10,16 +10,16 @@ import java.util.Date;
 public class TranferenciaDAO {
 
     @Autowired
-    private EntityManager em;
+    private EntityManager entityManager;
 
     @Autowired
     private TransferenciaRepository transferenciaRepository;
 
     @Autowired
-    private ClientDAO cdao;
+    private ClientDAO clientDAO;
 
     public String registrarTransferencia(Date fecha, Double monto, String cbuSalida, String cbuLlegada, String estado) {
-        em.createNamedStoredProcedureQuery("procedure-uno")
+        entityManager.createNamedStoredProcedureQuery("procedure-uno")
                 .setParameter("fecha", fecha)
                 .setParameter("monto", monto)
                 .setParameter("cbuLlegada", cbuLlegada)
@@ -37,8 +37,8 @@ public class TranferenciaDAO {
         String cbuSalida = transfer.getCbuSalida();
         String cbuLlegada = transfer.getCbuEntrada();
         String estado = "CANCELADO";
-        cdao.realizarTransferencia(cbuSalida,cbuLlegada, monto);
-        em.createNamedStoredProcedureQuery("procedure-dos")
+        clientDAO.realizarTransferencia(cbuSalida,cbuLlegada, monto);
+        entityManager.createNamedStoredProcedureQuery("procedure-dos")
                 .setParameter("id", id)
                 .setParameter("estado", estado)
                 .execute();

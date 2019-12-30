@@ -9,7 +9,6 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-
 @Endpoint
 public class ClientEndpoint {
     private static final String NAMESPACE_URI = "http://www.howtodoinjava.com/xml/school";
