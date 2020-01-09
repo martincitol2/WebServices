@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import javax.persistence.EntityManager;
+import java.io.File;
 
 @Controller
 @RequestMapping(path = "/demo")
@@ -28,6 +29,9 @@ public class MainController {
     @Autowired
     TranferenciaDAO tranferenciaDAO;
 
+    @Autowired
+    EntityManager entityManager;
+
     @PostMapping(path = "/add")
     public @ResponseBody
     String addNewUser(@RequestParam String name
@@ -38,25 +42,34 @@ public class MainController {
         userRepository.save(n);
         return "Saved";
     }
-
     @PutMapping(path = "/add/transfer/pending")
     public @ResponseBody
-    Object addTransferPending(@RequestParam String cbu, @RequestParam String cbu2, @RequestParam Double amount) {
+    Object addTransferPending(@RequestBody Transferencia transferencia)  {
         ClientDetailsResponse response = new ClientDetailsResponse();
         response.setDescripcion("Todo OK");
         response.setCodigoError("200");
         String est = "Pendiente";
+
         try {
 
-            tranferenciaDAO.registrarTransferencia(new Date(), amount, cbu, cbu2, est);
-
+            tranferenciaDAO.registrarTransferencia(transferencia);
+            long id = tranferenciaDAO.consultarUltimoRegistro();
+            File file = new File("C:\\aplicaciones\\transferencias\\imagenes\\recibidas",id+"-"+transferencia.getCbuSalida()+"-"+transferencia.getCbuEntrada()+".jpg");
+            file.createNewFile();
         } catch (Exception e) {
             logger.error("no se pudo realizar la transferencia debido a: " + e.getMessage());
             response.setDescripcion("No se pudo Realizar la transferencia");
             response.setCodigoError("500");
         }
 
+
         return response;
+    }
+
+    @GetMapping(path="/transferencia")
+    public @ResponseBody Object getTransferencia(){
+      Transferencia transferencia = (Transferencia) entityManager.createNativeQuery("select * from Transferencia where id=1",Transferencia.class).getSingleResult();
+      return transferencia;
     }
 
 /*

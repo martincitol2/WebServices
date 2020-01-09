@@ -17,11 +17,11 @@ public class ClientDAO {
     }
 
     @SuppressWarnings("unchecked")
-    public String realizarTransferencia(String cbu, String cbu2, Double amount) {
+    public String realizarTransferencia(Transferencia transferencia) {
         entityManager.createNamedStoredProcedureQuery("procedure-two")
-                .setParameter("cbu_llegada", cbu)
-                .setParameter("cbu_salida", cbu2)
-                .setParameter("importe", amount)
+                .setParameter("cbu_llegada", transferencia.getCbuSalida())
+                .setParameter("cbu_salida", transferencia.getCbuEntrada())
+                .setParameter("importe", transferencia.getMonto())
                 .execute();
         return "Transaccion Exitosa";
 

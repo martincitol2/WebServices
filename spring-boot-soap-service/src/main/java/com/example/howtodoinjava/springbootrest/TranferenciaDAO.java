@@ -2,9 +2,7 @@ package com.example.howtodoinjava.springbootrest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
-import java.util.Date;
 
 @Repository
 public class TranferenciaDAO {
@@ -18,26 +16,28 @@ public class TranferenciaDAO {
     @Autowired
     private ClientDAO clientDAO;
 
-    public String registrarTransferencia(Date fecha, Double monto, String cbuSalida, String cbuLlegada, String estado) {
+    public String registrarTransferencia(Transferencia transferencia) {
         entityManager.createNamedStoredProcedureQuery("procedure-uno")
-                .setParameter("fecha", fecha)
-                .setParameter("monto", monto)
-                .setParameter("cbuLlegada", cbuLlegada)
-                .setParameter("cbuSalida", cbuSalida)
-                .setParameter("estado", estado)
+                .setParameter("fecha", transferencia.getFecha())
+                .setParameter("monto", transferencia.getMonto())
+                .setParameter("cbuLlegada", transferencia.getCbuEntrada())
+                .setParameter("cbuSalida", transferencia.getCbuSalida())
+                .setParameter("estado", transferencia.getEstado())
+                .setParameter("imagen",transferencia.getImagen())
                 .execute();
-        return "Transaccion Exitosa";
+        return "Transferencia Exitosa";
 
+    }
+
+    public long consultarUltimoRegistro(){
+         Transferencia transferencia = (Transferencia) entityManager.createNativeQuery("select * from Transferencia WHERE id=(SELECT max(id) FROM Transferencia )",Transferencia.class).getSingleResult();
+         return transferencia.getId();
     }
 
     public String cancelarTransferencia(Long id) {
         Transferencia transfer = transferenciaRepository.getOne(id);
-        Date fecha = transfer.getFecha();
-        Double monto = transfer.getMonto();
-        String cbuSalida = transfer.getCbuSalida();
-        String cbuLlegada = transfer.getCbuEntrada();
         String estado = "CANCELADO";
-        clientDAO.realizarTransferencia(cbuSalida,cbuLlegada, monto);
+        clientDAO.realizarTransferencia(transfer);
         entityManager.createNamedStoredProcedureQuery("procedure-dos")
                 .setParameter("id", id)
                 .setParameter("estado", estado)

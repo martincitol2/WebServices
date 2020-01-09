@@ -15,7 +15,6 @@ public class User {
 
     private String email;
 
-
     public String getName() {
         return name;
     }
@@ -27,6 +26,5 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
 
 }

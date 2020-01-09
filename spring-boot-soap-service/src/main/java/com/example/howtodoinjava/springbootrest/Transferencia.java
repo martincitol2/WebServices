@@ -1,5 +1,4 @@
 package com.example.howtodoinjava.springbootrest;
-
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,7 +11,8 @@ import java.util.Date;
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "monto", type = Double.class),
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "cbuLlegada", type = String.class),
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "cbuSalida", type = String.class),
-                @StoredProcedureParameter(mode = ParameterMode.IN, name = "estado", type = String.class)
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "estado", type = String.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "imagen", type = Boolean.class)
         }),
         @NamedStoredProcedureQuery(name ="procedure-dos", procedureName = "cambiarEstadoTransferencia", parameters = {
                 @StoredProcedureParameter(mode = ParameterMode.IN, name = "id", type = Long.class),
@@ -35,6 +35,8 @@ public class Transferencia {
     private String cbuEntrada;
 
     private String estado;
+
+    private Boolean imagen;
 
     public String getEstado() {
         return estado;
@@ -76,9 +78,15 @@ public class Transferencia {
         this.cbuEntrada = cbuEntrada;
     }
 
+    public Boolean getImagen() {
+        return imagen;
+    }
+
     public Transferencia() {
 
     }
 
-
+    public long getId() {
+        return id;
+    }
 }
